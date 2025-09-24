@@ -1,0 +1,5 @@
+{
+"name": "Life Calendar",
+  "description": "Visualize your life week by week, from birth to a chosen life expectancy. Click on any week to see its days, and any day to see its hours, offering a unique perspective on the time you have lived and the time you have left.",
+  "requestFramePermissions": []
+}
