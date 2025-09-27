@@ -90,8 +90,8 @@ const YearView: React.FC<YearViewProps> = ({ birthDate, lifeExpectancy, onWeekCl
       {/* Urhere SVG - Pointing to current flashing week (only in dark mode) */}
       {currentWeek >= 0 && theme === 'dark' && (
         <div className="absolute z-10" style={{
-          top: `${100 + (preLifeYears.length * 20) + (Math.floor(currentWeek / 52) * 20) + 10}px`,
-          left: `${200 + ((currentWeek % 52) * 16) + 170}px`,
+          top: `${100 + (preLifeYears.length * 20) + (Math.floor(currentWeek / 52) * 20) + 12}px`,
+          left: `${200 + ((currentWeek % 52) * 16) + 164}px`,
           transform: 'translate(-50%, -50%)'
         }}>
           <img src="/urhere.svg" alt="Urhere" className="w-28 h-auto opacity-100" />
