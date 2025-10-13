@@ -91,7 +91,7 @@ const YearView: React.FC<YearViewProps> = ({ birthDate, lifeExpectancy, onWeekCl
       {currentWeek >= 0 && theme === 'dark' && (
         <div className="absolute z-10" style={{
           top: `${100 + (preLifeYears.length * 20) + (Math.floor(currentWeek / 52) * 20) + 12}px`,
-          left: `${200 + ((currentWeek % 52) * 16) + 164}px`,
+          left: `${200 + ((currentWeek % 52) * 16) + 177}px`,
           transform: 'translate(-50%, -50%)'
         }}>
           <img src="/urhere.svg" alt="Urhere" className="w-28 h-auto opacity-100" />
