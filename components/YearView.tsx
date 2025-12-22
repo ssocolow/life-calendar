@@ -1,5 +1,4 @@
-import React, { useMemo } from 'react';
-import { useTheme } from '../contexts/ThemeContext';
+import React, { useMemo, useRef, useEffect, useState } from 'react';
 
 interface YearViewProps {
   birthDate: Date;
@@ -9,7 +8,9 @@ interface YearViewProps {
 }
 
 const YearView: React.FC<YearViewProps> = ({ birthDate, lifeExpectancy, onWeekClick, now }) => {
-  const { theme } = useTheme();
+  const currentWeekRef = useRef<HTMLDivElement>(null);
+  const [svgPosition, setSvgPosition] = useState<{ top: number; left: number } | null>(null);
+
   const { preLifeYears, lifeYears, postLifeYears, weeksPassed, currentWeek, NUM_PHANTOM_YEARS } = useMemo(() => {
     const NUM_PHANTOM_YEARS_CONST = 16;
     if (isNaN(birthDate.getTime())) return { preLifeYears: [], lifeYears: [], postLifeYears: [], weeksPassed: 0, currentWeek: -1, NUM_PHANTOM_YEARS: NUM_PHANTOM_YEARS_CONST };
@@ -52,6 +53,28 @@ const YearView: React.FC<YearViewProps> = ({ birthDate, lifeExpectancy, onWeekCl
     };
   }, [birthDate, lifeExpectancy, now]);
 
+  // Update SVG position when currentWeek changes
+  useEffect(() => {
+    const updatePosition = () => {
+      if (currentWeekRef.current && currentWeek >= 0) {
+        const rect = currentWeekRef.current.getBoundingClientRect();
+        const container = currentWeekRef.current.closest('.relative');
+        if (container) {
+          const containerRect = container.getBoundingClientRect();
+          setSvgPosition({
+            top: rect.top - containerRect.top + rect.height / 2 + 60,
+            left: rect.left - containerRect.left + rect.width / 2 - 30
+          });
+        }
+      }
+    };
+
+    // Use requestAnimationFrame to ensure DOM is ready
+    requestAnimationFrame(() => {
+      updatePosition();
+    });
+  }, [currentWeek, lifeYears]);
+
   if (!lifeYears.length) {
     return (
       <div className="text-center text-gray-500 dark:text-gray-500 py-20">
@@ -87,11 +110,11 @@ const YearView: React.FC<YearViewProps> = ({ birthDate, lifeExpectancy, onWeekCl
         <img src="/udidnte.svg" alt="Udidnte" className="w-[300px] h-auto opacity-80" />
       </div>
 
-      {/* Urhere SVG - Pointing to current flashing week (only in dark mode) */}
-      {currentWeek >= 0 && theme === 'dark' && (
-        <div className="absolute z-10" style={{
-          top: `${100 + (preLifeYears.length * 20) + (Math.floor(currentWeek / 52) * 20) + 12}px`,
-          left: `${200 + ((currentWeek % 52) * 16) + 177}px`,
+      {/* Urhere SVG - Pointing to current flashing week */}
+      {currentWeek >= 0 && svgPosition && (
+        <div className="absolute z-10 pointer-events-none" style={{
+          top: `${svgPosition.top}px`,
+          left: `${svgPosition.left}px`,
           transform: 'translate(-50%, -50%)'
         }}>
           <img src="/urhere.svg" alt="Urhere" className="w-28 h-auto opacity-100" />
@@ -118,6 +141,7 @@ const YearView: React.FC<YearViewProps> = ({ birthDate, lifeExpectancy, onWeekCl
                 if (isPresent) {
                   return (
                     <div
+                      ref={currentWeekRef}
                       key={weekIndex}
                       title={getWeekTooltip(weekIndex)}
                       onClick={() => onWeekClick(weekIndex)}
@@ -128,9 +152,7 @@ const YearView: React.FC<YearViewProps> = ({ birthDate, lifeExpectancy, onWeekCl
 
                 const bgColor = isPast 
                   ? 'bg-teal-500 hover:bg-teal-400' 
-                  : theme === 'light' 
-                    ? 'bg-white border border-gray-300 hover:border-gray-400' 
-                    : 'bg-gray-700 hover:bg-gray-600';
+                  : 'bg-gray-700 hover:bg-gray-600';
 
                 return (
                   <div

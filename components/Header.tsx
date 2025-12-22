@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import { useTheme } from '../contexts/ThemeContext';
 
 interface HeaderProps {
   birthDate: string;
@@ -14,7 +13,6 @@ const Header: React.FC<HeaderProps> = ({
   lifeExpectancy,
   onLifeExpectancyChange,
 }) => {
-  const { theme } = useTheme();
 
   const birthDateObj = useMemo(() => {
     if (!birthDate || !/^\d{4}-\d{2}-\d{2}$/.test(birthDate)) return null;
@@ -38,13 +36,13 @@ const Header: React.FC<HeaderProps> = ({
   }, [birthDateObj, lifeExpectancy]);
 
   return (
-    <header className={`absolute inset-x-0 z-10 text-center pointer-events-none ${theme === 'light' ? 'top-0 -top-2 pt-2 sm:pt-3 md:pt-4' : 'top-0 pt-4 sm:pt-6 md:pt-8'}`}>
-      <div className={`flex flex-col items-center ${theme === 'light' ? 'gap-3' : 'gap-6'}`}>
-          <div className={theme === 'light' ? 'bg-white/90 backdrop-blur-sm rounded-lg px-6 py-4 shadow-lg' : ''}>
-            <h1 className={`text-4xl sm:text-5xl font-bold tracking-tight ${theme === 'light' ? 'text-black drop-shadow-sm' : 'text-white'}`}>
+    <header className="absolute inset-x-0 z-10 text-center pointer-events-none top-0 pt-4 sm:pt-6 md:pt-8">
+      <div className="flex flex-col items-center gap-6">
+          <div>
+            <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-white">
               Life Calendar
             </h1>
-            <p className={`mt-3 text-xl italic max-w-2xl ${theme === 'light' ? 'text-black drop-shadow-sm' : 'text-gray-200'}`}>
+            <p className="mt-3 text-xl italic max-w-2xl text-gray-200">
               "Teach us to number our days, that we may gain a heart of wisdom"
             </p>
           </div>

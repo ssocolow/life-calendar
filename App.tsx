@@ -5,8 +5,6 @@ import DayView from './components/DayView';
 import HourView from './components/HourView';
 import MinuteView from './components/MinuteView';
 import Header from './components/Header';
-import ThemeToggle from './components/ThemeToggle';
-import { ThemeProvider } from './contexts/ThemeContext';
 import { ModalContentType } from './types';
 
 const AppContent: React.FC = () => {
@@ -123,7 +121,6 @@ const AppContent: React.FC = () => {
           lifeExpectancy={lifeExpectancy}
           onLifeExpectancyChange={setLifeExpectancy}
         />
-        <ThemeToggle />
         <main className="px-4 sm:px-6 md:px-8 pb-4 sm:pb-6 md:pb-8">
           <YearView
             birthDate={birthDateObj}
@@ -192,11 +189,12 @@ const AppContent: React.FC = () => {
 };
 
 const App: React.FC = () => {
-  return (
-    <ThemeProvider>
-      <AppContent />
-    </ThemeProvider>
-  );
+  useEffect(() => {
+    // Always set dark theme
+    document.documentElement.setAttribute('data-theme', 'dark');
+  }, []);
+
+  return <AppContent />;
 };
 
 export default App;
