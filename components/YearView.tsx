@@ -53,7 +53,7 @@ const YearView: React.FC<YearViewProps> = ({ birthDate, lifeExpectancy, onWeekCl
     };
   }, [birthDate, lifeExpectancy, now]);
 
-  // Update SVG position when currentWeek changes
+  // Update SVG position when currentWeek changes or window resizes
   useEffect(() => {
     const updatePosition = () => {
       if (currentWeekRef.current && currentWeek >= 0) {
@@ -69,10 +69,12 @@ const YearView: React.FC<YearViewProps> = ({ birthDate, lifeExpectancy, onWeekCl
       }
     };
 
-    // Use requestAnimationFrame to ensure DOM is ready
     requestAnimationFrame(() => {
       updatePosition();
     });
+
+    window.addEventListener('resize', updatePosition);
+    return () => window.removeEventListener('resize', updatePosition);
   }, [currentWeek, lifeYears]);
 
   if (!lifeYears.length) {
@@ -90,13 +92,13 @@ const YearView: React.FC<YearViewProps> = ({ birthDate, lifeExpectancy, onWeekCl
   };
 
   const PhantomYearRow = ({ year, ...props }: { year: number; [key: string]: any }) => (
-    <div className="flex items-start gap-3">
-        <div className="w-8 shrink-0 text-right font-mono text-xs text-gray-500 dark:text-gray-500 pt-px">{year}</div>
-        <div className="flex flex-wrap gap-1">
+    <div className="flex items-start gap-1 md:gap-2 lg:gap-3">
+        <div className="w-6 md:w-7 lg:w-8 shrink-0 text-right font-mono text-xs text-gray-500 dark:text-gray-500 pt-px">{year}</div>
+        <div className="flex flex-wrap gap-[1px] md:gap-[2px] lg:gap-1">
             {Array.from({ length: 52 }).map((_, index) => (
                 <div
                     key={`${year}-${index}`}
-                    className="w-3 h-3 rounded-sm bg-purple-900/60 dark:bg-purple-900/60"
+                    className="w-[5px] h-[5px] md:w-[10px] md:h-[10px] lg:w-3 lg:h-3 rounded-sm bg-purple-900/60 dark:bg-purple-900/60"
                 />
             ))}
         </div>
@@ -131,13 +133,13 @@ const YearView: React.FC<YearViewProps> = ({ birthDate, lifeExpectancy, onWeekCl
         
         {/* Render life years */}
         {lifeYears.map(({ year, weeks }) => (
-          <div key={year} className="flex items-start gap-3">
-            <div className="w-8 shrink-0 text-right font-mono text-xs text-gray-500 dark:text-gray-500 pt-px">{year}</div>
-            <div className="flex flex-wrap gap-1">
+          <div key={year} className="flex items-start gap-1 md:gap-2 lg:gap-3">
+            <div className="w-6 md:w-7 lg:w-8 shrink-0 text-right font-mono text-xs text-gray-500 dark:text-gray-500 pt-px">{year}</div>
+            <div className="flex flex-wrap gap-[1px] md:gap-[2px] lg:gap-1">
               {weeks.map(({ weekIndex }) => {
                 const isPast = weekIndex < weeksPassed;
                 const isPresent = weekIndex === currentWeek;
-                
+
                 if (isPresent) {
                   return (
                     <div
@@ -145,13 +147,13 @@ const YearView: React.FC<YearViewProps> = ({ birthDate, lifeExpectancy, onWeekCl
                       key={weekIndex}
                       title={getWeekTooltip(weekIndex)}
                       onClick={() => onWeekClick(weekIndex)}
-                      className="w-3 h-3 rounded-sm cursor-pointer transition-transform duration-150 hover:scale-125 bg-yellow-400 hover:bg-yellow-300 animate-pulse"
+                      className="w-[5px] h-[5px] md:w-[10px] md:h-[10px] lg:w-3 lg:h-3 rounded-sm cursor-pointer transition-transform duration-150 hover:scale-125 bg-yellow-400 hover:bg-yellow-300 animate-pulse"
                     />
                   );
                 }
 
-                const bgColor = isPast 
-                  ? 'bg-teal-500 hover:bg-teal-400' 
+                const bgColor = isPast
+                  ? 'bg-teal-500 hover:bg-teal-400'
                   : 'bg-gray-700 hover:bg-gray-600';
 
                 return (
@@ -159,7 +161,7 @@ const YearView: React.FC<YearViewProps> = ({ birthDate, lifeExpectancy, onWeekCl
                     key={weekIndex}
                     title={getWeekTooltip(weekIndex)}
                     onClick={() => onWeekClick(weekIndex)}
-                    className={`w-3 h-3 rounded-sm cursor-pointer transition-transform duration-150 hover:scale-125 ${bgColor}`}
+                    className={`w-[5px] h-[5px] md:w-[10px] md:h-[10px] lg:w-3 lg:h-3 rounded-sm cursor-pointer transition-transform duration-150 hover:scale-125 ${bgColor}`}
                   />
                 );
               })}
