@@ -107,8 +107,8 @@ const YearView: React.FC<YearViewProps> = ({ birthDate, lifeExpectancy, onWeekCl
   
   return (
     <div className="relative flex justify-center">
-      {/* Udidnte SVG - Top right of the page */}
-      <div className="absolute top-20 right-0 z-10">
+      {/* Udidnte SVG - Top right of the page (desktop overlay only) */}
+      <div className="hidden lg:block absolute top-20 right-0 z-10">
         <img src="/udidnte.svg" alt="Udidnte" className="w-[300px] h-auto opacity-80" />
       </div>
 
@@ -171,8 +171,8 @@ const YearView: React.FC<YearViewProps> = ({ birthDate, lifeExpectancy, onWeekCl
         
         <div className="w-full h-px bg-red-500 -my-0.5" aria-hidden="true" />
 
-        {/* Uwonte SVG - Right side under the red line */}
-        <div className="absolute right-0 z-10" style={{
+        {/* Uwonte SVG - Right side under the red line (desktop overlay only) */}
+        <div className="hidden lg:block absolute right-0 z-10" style={{
           top: `${88 + (preLifeYears.length * 20) + (lifeYears.length * 20) + 40}px`
         }}>
           <img src="/uwonte.svg" alt="Uwonte" className="w-[300px] h-auto opacity-80" />

@@ -36,7 +36,7 @@ const Header: React.FC<HeaderProps> = ({
   }, [birthDateObj, lifeExpectancy]);
 
   return (
-    <header className="absolute inset-x-0 z-10 text-center pointer-events-none top-0 pt-4 sm:pt-6 md:pt-8">
+    <header className="relative z-10 text-center pointer-events-none pt-4 sm:pt-6 md:pt-8 pb-6 lg:absolute lg:inset-x-0 lg:top-0 lg:pb-0">
       <div className="flex flex-col items-center gap-6">
           <div>
             <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-white">
